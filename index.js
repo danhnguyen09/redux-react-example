@@ -1,6 +1,5 @@
 import {AppRegistry, Keyboard} from 'react-native';
 // import App from './src/index';
-import {BackHandler} from "react-native";
 import React, {Component} from 'react';
 import {Provider, connect} from 'react-redux';
 import store from './src/store';
@@ -11,25 +10,15 @@ class AyogaMobileApp extends Component {
         super(props);
     }
 
-    componentDidMount() {
-        BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
-    }
-
-    componentWillUnmount() {
-    }
-
-    onBackPress = () => {
-        const {dispatch, navi} = this.props;
-        if (navi.index === 0) {
-            return false;
-        }
-        dispatch(NavigationActions.back());
-        return true;
-    };
-
     componentWillUnmount() {
         this._hideKeyBoard();
-        BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
+    }
+
+    componentDidMount() {
+
+    }
+
+    componentWillMount() {
     }
 
     _hideKeyBoard() {
