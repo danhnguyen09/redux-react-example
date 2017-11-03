@@ -1,0 +1,3 @@
+rootProject.name = 'Ayoga'
+
+include ':app'
