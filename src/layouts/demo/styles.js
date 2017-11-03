@@ -42,6 +42,15 @@ export default {
         // fontFamily: 'Roboto-Regular',
     },
 
+    button_back: {
+        margin: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: "#ffffff",
+        width: 25,
+        height: 25,
+    },
+
     buttonContainer: {
         flex: 1,
         flexDirection: 'row',

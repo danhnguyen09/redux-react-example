@@ -1,16 +1,38 @@
-import { Text, View, Platform, TextInput, StyleSheet, ListView, Image } from 'react-native'
-import React, { Component } from 'react'
-import { Icon, Left, InputGroup, Input, Button } from 'native-base';
+import {Text, View, Platform, TextInput, StyleSheet, ListView, Image, TouchableOpacity} from 'react-native'
+import React, {Component} from 'react'
+import {Icon, Left, InputGroup, Input, Button} from 'native-base';
 import ToolBar from '../../components/LeftMenuNavigation/Toolbar/index'
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import Actions from '../../actions';
 import LeftMenuNavigation from "../../components/LeftMenuNavigation/index";
+import store from '../../store';
+import {NavigationActions} from 'react-navigation';
 
 class Demo extends Component {
-    static navigationOptions = {
-        title: 'Main page',
-    };
+
+    static navigationOptions = (navigation) => ({
+        title: "Demo Page",
+        headerTitleStyle: {
+            color: 'white',
+            textAlign: 'center'
+        },
+        headerLeft:
+            <TouchableOpacity
+                onPress={() => {
+                    store.dispatch(NavigationActions.back())
+                }}>
+                <Image style={{width: 30, height: 30, margin: 15}}
+                       source={require('../../images/img/ic_back.png')}
+                />
+            </TouchableOpacity>,
+        headerStyle: {
+            backgroundColor: 'green',
+            justifyContent: 'center'
+        },
+
+    })
+
     constructor(props) {
         super(props);
         this.state = {
@@ -20,13 +42,13 @@ class Demo extends Component {
     }
 
     componentDidMount() {
-        this.setState({ isLoading: true });
-        this.props.actions.getPhoto();        
+        this.setState({isLoading: true});
+        this.props.actions.getPhoto();
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({ isLoading: nextProps.state.isLoading });
-        if(!nextProps.state.isLoading && nextProps.state.photos) {
+        this.setState({isLoading: nextProps.state.isLoading});
+        if (!nextProps.state.isLoading && nextProps.state.photos) {
             this.setState({
                 dataSource: this.state.dataSource.cloneWithRows(nextProps.state.photos),
             });
@@ -34,7 +56,7 @@ class Demo extends Component {
     }
 
     render() {
-        const { isLoading } = this.state;
+        const {isLoading} = this.state;
         let contentView = (
             <View style={styles.container}>
                 {isLoading
@@ -53,35 +75,36 @@ class Demo extends Component {
 
 function mapStateToProps(state) {
     return {
-        state: { ...state.photoReducer }
+        state: {...state.photoReducer}
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators({ ...Actions.photoActions }, dispatch)
+        actions: bindActionCreators({...Actions.photoActions}, dispatch)
     }
 }
+
 export default connect(mapStateToProps, mapDispatchToProps)(Demo);
 
 const styles = StyleSheet.create({
     container: {
-      marginTop: Platform.OS === 'ios' ? 10 : 0,
-      flex: 1,
-      backgroundColor: 'white',
+        marginTop: Platform.OS === 'ios' ? 10 : 0,
+        flex: 1,
+        backgroundColor: 'white',
     },
     loading: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     scrollSpinner: {
-      marginVertical: 20,
+        marginVertical: 20,
     },
     row: {
         padding: 10,
     }
-  });
+});
 
 const stylesRow = StyleSheet.create({
     container: {
@@ -102,7 +125,7 @@ const stylesRow = StyleSheet.create({
 });
 const Row = (photos) => (
     <View style={stylesRow.container}>
-        <Image source={{ uri: photos.thumbnailUrl}} style={stylesRow.photo} />
+        <Image source={{uri: photos.thumbnailUrl}} style={stylesRow.photo}/>
         <Text style={stylesRow.text}>
             {`${photos.title} ${photos.id}`}
         </Text>

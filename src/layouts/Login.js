@@ -19,8 +19,7 @@ class Login extends Component {
     }
 
     static navigationOptions = {
-        title: 'LoginPage',
-        height: 0,
+        header: null,
     };
 
     _doLogin() {
@@ -102,7 +101,7 @@ class Login extends Component {
                     textAlign: 'center'
                 }}>{this.state.isValid ? ' ' : "Email or password is wrong format!"}</Text>
                 <TouchableOpacity style={styles.button}
-                                  onPress={this._doLogin.bind(this)}>
+                                  onPress={this._navigateTo}>
                     <Text style={styles.login_button}>Login</Text>
                 </TouchableOpacity>
             </View>

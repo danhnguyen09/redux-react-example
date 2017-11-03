@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {BackHandler} from "react-native";
-import {addNavigationHelpers} from 'react-navigation';
+import {addNavigationHelpers, NavigationActions} from 'react-navigation';
 import AppNavigator from './config';
 import Actions from '../actions';
+import store from '../store'
 
 
 class AppWithNavigationState extends Component {
@@ -22,11 +23,11 @@ class AppWithNavigationState extends Component {
     }
 
     onBackPress = () => {
-        const {dispatch, navi} = this.props;
+        const {navi} = this.props;
         if (navi.index === 0) {
             return false;
         }
-        dispatch(NavigationActions.back());
+        store.dispatch(NavigationActions.back());
         return true;
     };
 
