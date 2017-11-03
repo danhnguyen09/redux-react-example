@@ -8,7 +8,7 @@ class Home extends Component {
     }
 
     render() {
-        return (<Demo {...this.props}/>)
+        return (<Demo2 {...this.props}/>)
     }
 }
 

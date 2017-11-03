@@ -15,7 +15,6 @@ class Login extends Component {
             password: "123456",
             isValid: true,
             isLoading: false,
-            isLoginSuccess: false
         }
     }
 
@@ -27,9 +26,10 @@ class Login extends Component {
     _doLogin() {
         if (validateEmail(this.state.username) && validatePassword(this.state.password)) {
             this.setState({
-                isValid: true
+                isValid: true,
             })
             this.props.actions.loginWithEmail(this.state.username, this.state.password)
+
         } else {
             this.setState({
                 isValid: false
@@ -55,19 +55,13 @@ class Login extends Component {
     }
 
     componentWillReceiveProps(loginProps) {
-        console.log("Login componentWillReceiveProps!")
         this.setState({
-            isLoading: loginProps.state.isLoading
+            isLoading: loginProps.state.isLoading,
         })
-        if (!loginProps.state.isLoading && loginProps.state.user) {
+        if (loginProps.state.isLoginSuccess && !loginProps.state.isWaitingLogin) {
+            this._navigateTo()
             console.log("Login success! ")
-            this.setState({
-                isLoginSuccess: true
-            })
         } else {
-            this.setState({
-                isLoginSuccess: false
-            })
             console.log(" Login fail! ")
         }
 
@@ -111,7 +105,6 @@ class Login extends Component {
                                   onPress={this._doLogin.bind(this)}>
                     <Text style={styles.login_button}>Login</Text>
                 </TouchableOpacity>
-               <Text ref="gotoMain" onPress={this._navigateTo} title=" "/>
             </View>
 
         );

@@ -16,6 +16,7 @@ export default class APIService extends React.Component {
     }
 
     static async post(url, body) {
+        console.log(JSON.stringify(body));
         return fetch(url, {
             method: 'POST',
             headers: {
