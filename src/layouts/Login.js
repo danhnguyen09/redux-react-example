@@ -8,13 +8,15 @@ import Actions from '../actions';
 import store from "../store/index";
 
 class Login extends Component {
+
     constructor(props) {
         super(props)
         this.state = {
             username: "demo@gmail.com",
             password: "123456",
-            isValid: true,
-            isLoading: false,
+            isValid: false,
+            //isLoading: false,
+            movedPage: false
         }
     }
 
@@ -23,9 +25,11 @@ class Login extends Component {
     };
 
     _doLogin() {
+        console.log("call login")
         if (validateEmail(this.state.username) && validatePassword(this.state.password)) {
             this.setState({
                 isValid: true,
+                // isLoading:true
             })
             this.props.actions.loginWithEmail(this.state.username, this.state.password)
 
@@ -36,8 +40,14 @@ class Login extends Component {
         }
     }
 
-    _navigateTo = () => {
-        store.dispatch(NavigationActions.navigate({type: 'NAVI_DEMO', routeName: 'MainPage'}))
+    _navigateToMain = () => {
+        const resetAction = NavigationActions.reset({
+            index: 0,
+            actions: [
+                NavigationActions.navigate({ type: 'NAVI_DEMO', routeName: 'MainPage' })
+            ]
+        });
+        store.dispatch(resetAction)
     }
 
     _onModelYearPress = () => {
@@ -46,19 +56,45 @@ class Login extends Component {
     };
 
     componentDidMount() {
-        this.setState({isLoading: true});
+        //this.setState({isLoading: true});
+        fetch('http://192.168.1.13:8888/android_login_api/login.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: '{"email": "demo@gmail.com", "password": "123456"}'
+
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson)
+                dispatch({
+                    type: responseJson.error ? ActionTypes.LOGIN_FAIL : ActionTypes.LOGIN_SUCCESS,
+                    user: responseJson.error ? null : responseJson,
+                    error: responseJson.error ? responseJson : null
+                })
+            })
+            .catch((error) => {
+                console.log(error)
+                dispatch({
+                    type: ActionTypes.LOGIN_FAIL
+                })
+            })
     }
 
     componentWillUnmount() {
-        this.setState({isLoading: false});
+        //this.setState({isLoading: false});
     }
 
     componentWillReceiveProps(loginProps) {
-        this.setState({
-            isLoading: loginProps.state.isLoading,
-        })
-        if (loginProps.state.isLoginSuccess && !loginProps.state.isWaitingLogin) {
-            this._navigateTo()
+        //this.setState({
+        //isLoading: loginProps.state.isLoading,
+        //})
+        if (loginProps.state.isLoginSuccess && !loginProps.state.isWaitingLogin && !this.state.movedPage) {
+            this.setState({
+                movedPage: true
+            })
+            this._navigateToMain()
             console.log("Login success! ")
         } else {
             console.log(" Login fail! ")
@@ -101,7 +137,7 @@ class Login extends Component {
                     textAlign: 'center'
                 }}>{this.state.isValid ? ' ' : "Email or password is wrong format!"}</Text>
                 <TouchableOpacity style={styles.button}
-                                  onPress={this._navigateTo}>
+                                  onPress={this._doLogin.bind(this)}>
                     <Text style={styles.login_button}>Login</Text>
                 </TouchableOpacity>
             </View>

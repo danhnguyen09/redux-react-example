@@ -20,7 +20,7 @@ class Demo extends Component {
         headerLeft:
             <TouchableOpacity
                 onPress={() => {
-                    store.dispatch(NavigationActions.back())
+                    // store.dispatch(NavigationActions.back())
                 }}>
                 <Image style={{width: 30, height: 30, margin: 15}}
                        source={require('../../images/img/ic_back.png')}

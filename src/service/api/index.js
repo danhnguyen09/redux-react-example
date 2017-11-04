@@ -20,9 +20,10 @@ export default class APIService extends React.Component {
         return fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': Config.HEADER_TYPE,
-                'Cookie': await AppData.getCookie(),
-                'X-CSRFToken': await AppData.getToken()
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                // 'Cookie': await AppData.getCookie(),
+                // 'X-CSRFToken': await AppData.getToken()
             },
             body: JSON.stringify(body)
         });

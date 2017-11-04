@@ -5,7 +5,8 @@ const initState = {
     isLoading: false,
     user: null,
     isLoginSuccess: false,
-    isWaitingLogin: true
+    isWaitingLogin: false,
+    error: null
 };
 
 export default (state = initState, action) => {
@@ -15,8 +16,9 @@ export default (state = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                isLoginSuccess: true,
-                isWaitingLogin: false
+                isLoginSuccess: false,
+                isWaitingLogin: false,
+                error: action.error
             }
         case ActionType.LOGIN_SUCCESS:
             return {
@@ -24,13 +26,15 @@ export default (state = initState, action) => {
                 isLoading: false,
                 user: action.user,
                 isLoginSuccess: true,
-                isWaitingLogin: false
+                isWaitingLogin: false,
+                error: null
             }
         case ActionType.LOGIN:
             return {
                 ...state,
                 isLoading: true,
-                isWaitingLogin: true
+                isWaitingLogin: true,
+                isLoginSuccess: false
             }
         default :
             return {...state}
