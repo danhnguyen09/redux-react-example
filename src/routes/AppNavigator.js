@@ -50,7 +50,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators(...Actions.naviActions, dispatch)
+        actions: bindActionCreators(...Actions.naviActions, dispatch),
+        dispatch: dispatch
     }
 }
 

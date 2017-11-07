@@ -1,6 +1,9 @@
+import {Platform} from "react-native";
+
 export default {
     container: {
         flex: 1,
+        margin: 20
     },
     input_group: {
         borderColor: "#999999",
@@ -25,6 +28,8 @@ export default {
         height: 48,
         fontSize: 16,
         padding: 10,
+        borderBottomWidth: Platform.OS =="ios"? 0.5 : 0,
+        borderBottomColor: 'black'
         // fontFamily: 'Roboto-Regular',
     },
     login_button: {
@@ -35,7 +40,6 @@ export default {
 
     button: {
         height: 48,
-        margin: 20,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: "#FFA000",
@@ -55,7 +59,6 @@ export default {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'center'
-    }
-
+    },
 
 }

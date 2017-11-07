@@ -14,8 +14,7 @@ class Login extends Component {
         this.state = {
             username: "demo@gmail.com",
             password: "123456",
-            isValid: false,
-            //isLoading: false,
+            isShowValidError: false,
             movedPage: false
         }
     }
@@ -28,14 +27,13 @@ class Login extends Component {
         console.log("call login")
         if (validateEmail(this.state.username) && validatePassword(this.state.password)) {
             this.setState({
-                isValid: true,
-                // isLoading:true
+                isShowValidError: false,
             })
             this.props.actions.loginWithEmail(this.state.username, this.state.password)
 
         } else {
             this.setState({
-                isValid: false
+                isShowValidError: true
             })
         }
     }
@@ -44,7 +42,7 @@ class Login extends Component {
         const resetAction = NavigationActions.reset({
             index: 0,
             actions: [
-                NavigationActions.navigate({ type: 'NAVI_DEMO', routeName: 'MainPage' })
+                NavigationActions.navigate({type: 'NAVI_DEMO', routeName: 'MainPage'})
             ]
         });
         store.dispatch(resetAction)
@@ -55,41 +53,10 @@ class Login extends Component {
         navigate('HomePage', {title: "List Data"})
     };
 
-    componentDidMount() {
-        //this.setState({isLoading: true});
-        fetch('http://192.168.1.13:8888/android_login_api/login.php', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: '{"email": "demo@gmail.com", "password": "123456"}'
-
-        }).then((response) => response.json())
-            .then((responseJson) => {
-                console.log(responseJson)
-                dispatch({
-                    type: responseJson.error ? ActionTypes.LOGIN_FAIL : ActionTypes.LOGIN_SUCCESS,
-                    user: responseJson.error ? null : responseJson,
-                    error: responseJson.error ? responseJson : null
-                })
-            })
-            .catch((error) => {
-                console.log(error)
-                dispatch({
-                    type: ActionTypes.LOGIN_FAIL
-                })
-            })
-    }
-
-    componentWillUnmount() {
-        //this.setState({isLoading: false});
-    }
-
     componentWillReceiveProps(loginProps) {
-        //this.setState({
-        //isLoading: loginProps.state.isLoading,
-        //})
+        this.setState({
+            isLoading: loginProps.state.isLoading,
+        })
         if (loginProps.state.isLoginSuccess && !loginProps.state.isWaitingLogin && !this.state.movedPage) {
             this.setState({
                 movedPage: true
@@ -113,9 +80,9 @@ class Login extends Component {
                            returnKeyType="next"
                            value="demo@gmail.com"
                            onChangeText={(input) => {
-                               this.state.username = input;
                                this.setState({
-                                   isValid: true
+                                   isShowValidError: false,
+                                   username: input
                                })
                            }}/>
 
@@ -125,9 +92,9 @@ class Login extends Component {
                            returnKeyType="go"
                            value="123456"
                            onChangeText={(input) => {
-                               this.state.password = input;
                                this.setState({
-                                   isValid: true
+                                   isShowValidError: false,
+                                   password: input
                                })
                            }}/>
 
@@ -135,7 +102,7 @@ class Login extends Component {
                     color: "#FF0000",
                     margin: 20,
                     textAlign: 'center'
-                }}>{this.state.isValid ? ' ' : "Email or password is wrong format!"}</Text>
+                }}>{this.state.isShowValidError ? "Email or password is wrong format!" : ' '}</Text>
                 <TouchableOpacity style={styles.button}
                                   onPress={this._doLogin.bind(this)}>
                     <Text style={styles.login_button}>Login</Text>

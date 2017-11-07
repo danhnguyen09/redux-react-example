@@ -17,6 +17,6 @@ export function getPhoto() {
         dispatch({
           type: ActionTypes.GET_PHOTO_FAILURE
         })
-      })
+      }).done();
   }
 }

@@ -1,20 +1,48 @@
-import {Text, View, Platform, TextInput} from 'react-native'
+import {Text, View, Platform, TextInput, TouchableOpacity, Image} from 'react-native'
 import React, {Component} from 'react'
 import {Icon, Left, InputGroup, Input, Button} from 'native-base';
-import ToolBar from '../../components/LeftMenuNavigation/Toolbar/index'
 import styles from './styles';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import Actions from '../../actions';
-import LeftMenuNavigation from "../../components/LeftMenuNavigation/index";
-import Home from "../home";
-import Demo from './index'
+import store from "../../store/index";
+import {NavigationActions} from 'react-navigation';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 class Demo2 extends Component {
+    static navigationOptions = (navigation) => ({
+        title: "Demo2 Page",
+        headerTitleStyle: {
+            color: 'white',
+            textAlign: 'center'
+        },
+        headerLeft:
+            <TouchableOpacity
+                onPress={() => {
+                    store.dispatch(NavigationActions.navigate({routeName: 'DrawerOpen'}))
+                    // this.prop.navigation.navigate('DrawerOpen')
+                }}>
+                <Image style={{width: 24, height: 24, margin: 15}}
+                       source={require('../../images/img/setting.png')}
+                />
+            </TouchableOpacity>,
+        headerStyle: {
+            backgroundColor: 'green',
+            justifyContent: 'center'
+        },
+        drawerIcon: () => {
+            return (
+                <Image style={{width: 24, height: 24, margin: 15}}
+                       source={require('../../images/img/ic_weekend_black_24dp_2x.png')}/>
+            )
+        }
+
+    })
+
     constructor(props) {
         super(props);
         this.state = {
-            value: this.props.params.value
+            value: null
         }
     }
 
@@ -27,7 +55,7 @@ class Demo2 extends Component {
     }
 
     _onSendButtonClick() {
-        this.props.navigator.resetTo({screen: Demo, value: this.state.value})
+        // this.props.navigator.resetTo({screen: Demo, value: this.state.value})
     }
 
     render() {
@@ -38,8 +66,7 @@ class Demo2 extends Component {
                         <Input name="txtInput" placeholder='Enter value' style={styles.input}
                                placeholderTextColor='#999999'
                                autoFocus={true}
-                               value={this.state.value}
-                               onChangeText={(value) => this.setState({value})}
+                               onChangeText={(value) => this.setState({value: value})}
                                onSubmitEditing={() => {
                                    this._onSendButtonClick()
                                }}
@@ -52,15 +79,12 @@ class Demo2 extends Component {
                         <Button bordered style={{marginLeft: 20}} onPress={this._onButton2Click.bind(this)}>
                             <Text style={{width: 80, textAlign: 'center'}}>-5</Text>
                         </Button>
-                        <Button bordered style={{marginLeft: 20}} onPress={this._onSendButtonClick.bind(this)}>
-                            <Text style={{width: 80, textAlign: 'center'}}>Go Home</Text>
-                        </Button>
                     </View>
                     <Text style={{marginTop: 50}}>Result: {this.props.state.value}</Text>
                 </View>
 
             </View>);
-        return (<LeftMenuNavigation contentView={contentView} navigator={this.props.navigator}/>)
+        return (contentView)
     }
 }
 

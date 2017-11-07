@@ -9,8 +9,7 @@ export function loginWithEmail(email, password) {
         APIService.post(API.login(), {
             email: email,
             password: password
-        })
-            .then((response) => response.json())
+        }).then((response) => response.json())
             .then((responseJson) => {
                 dispatch({
                     type: responseJson.error ? ActionTypes.LOGIN_FAIL : ActionTypes.LOGIN_SUCCESS,
@@ -23,6 +22,6 @@ export function loginWithEmail(email, password) {
                 dispatch({
                     type: ActionTypes.LOGIN_FAIL
                 })
-            })
+            }).done();
     }
 }

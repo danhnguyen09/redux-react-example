@@ -16,7 +16,7 @@ export default (state = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                isLoginSuccess: false,
+                isLoginSuccess: true,
                 isWaitingLogin: false,
                 error: action.error
             }
